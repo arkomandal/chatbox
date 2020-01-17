@@ -1,0 +1,36 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+  <mat-card class="box">
+    <mat-card-header>
+      <mat-card-title>Register</mat-card-title>
+    </mat-card-header>
+
+    <form class="example-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
+      <mat-card-content>
+        <mat-form-field class="example-full-width">
+          <input matInput type="text" class="form-control" formControlName="user_name" placeholder="Name" required>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <input  matInput type="text" class="form-control" formControlName="phone" placeholder="Phone" required>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <input matInput type="text" class="form-control" formControlName="password" placeholder="Password" required>
+        </mat-form-field>
+
+        <!-- <mat-form-field class="example-full-width">
+          <mat-label>Choose a role...</mat-label>
+          <mat-select [(value)]="selected">
+            <mat-option [value]="roles" *ngFor="let roles of Roles">{{roles}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+
+      </mat-card-content>
+
+      <button mat-stroked-button type="submit" [disabled]="!signupForm.valid" color="accent" class="btn-block">Register</button>
+
+    </form>
+  </mat-card>
+</div>

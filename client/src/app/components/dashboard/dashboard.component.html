@@ -1,0 +1,33 @@
+<div class='container'>
+    <div class='chatbox'>
+        <div class='chatbox__user-list' *ngIf="user">
+            <h1>List of users and groups</h1>
+            <div class='chatbox__user--active' *ngFor="let group of groups">
+                <p (click)="getGroupMessages(group.group)">{{group.group.group_name}}</p>
+            </div>
+            <!-- <form [formGroup]="groupForm" (ngSubmit)="createGroup()">
+                <div class="row">
+                    <input type="text" class="form-control" formControlName="group_name" placeholder="Create new group"
+                        required>
+                    <button type="submit" [disabled]="!groupForm.valid" class="btn btn-primary px-4">Create</button>
+                </div>
+            </form> -->
+        </div>
+        <div *ngIf="selectedGroup && messages">
+            <div class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                (scrolled)="onScroll()" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false">
+                <div class="chatbox__messages" *ngFor="let message of messages">
+                    <div class="chatbox__messages__user-message">
+                        <div class="chatbox__messages__user-message--ind-message">
+                            <p class="name">{{message.sender}}</p>
+                            <br />
+                            <p class="message">{{message.message}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form [formGroup]="messageForm" (keydown)="onSend($event)">
+                <input type="text" class="form-control" formControlName="message" placeholder="Enter your message" required>
+            </form>
+        </div>
+    </div>

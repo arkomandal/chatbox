@@ -1,0 +1,16 @@
+<mat-toolbar color="primary" class="app-header">
+    <div>
+        <span *ngIf="!isLoggedIn()"><a class="positronx">Welcome</a></span>
+        <span *ngIf="isLoggedIn()"><a class="positronx">{{user.user_name}}</a></span>
+    </div>
+    <span class="nav-tool-items" *ngIf="!isLoggedIn()">
+        <a mat-button routerLink="login" routerLinkActive="active" routerLink="/auth">Log in</a>
+        <a mat-button mat-raised-button routerLink="register" routerLinkActive="active"
+            routerLink="/signup">Register</a>
+    </span>
+    <span class="nav-tool-items" *ngIf="isLoggedIn()">
+        <a mat-button routerLink="/auth" (click)="logout()">Logout</a>
+    </span>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
