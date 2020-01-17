@@ -1,25 +1,52 @@
-.search-results {
-  height: 370px;
+.user-scrollbar {
+  height: 368px;
   overflow: scroll; //scroll
   overflow-x: hidden;
 }
 
 /* width */
-::-webkit-scrollbar {
-  width: 2px;
+mat-nav-list.user-scrollbar::-webkit-scrollbar {
+  // width: 2px;
+  width: 0px;
 }
 /* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
+mat-nav-list.user-scrollbar::-webkit-scrollbar-track {
+  // box-shadow: inset 0 0 5px grey;
   // border-radius: 10px;
+  box-shadow: inset 0 0 0px grey;
 }
 /* Handle */
-::-webkit-scrollbar-thumb {
+mat-nav-list.user-scrollbar::-webkit-scrollbar-thumb {
   background:  rgba(255, 255, 255, 0.8);
   // border-radius: 10px;
 }
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+mat-nav-list.user-scrollbar::-webkit-scrollbar-thumb:hover {
+  background:  rgba(255, 255, 255, 0.8);
+}
+
+.search-results {
+  height: 369px;
+  overflow: scroll; //scroll
+  overflow-x: hidden;
+}
+
+/* width */
+div.search-results::-webkit-scrollbar {
+  width: 2px;
+}
+/* Track */
+div.search-results::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 2px;
+}
+/* Handle */
+div.search-results::-webkit-scrollbar-thumb {
+  background:  rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+}
+/* Handle on hover */
+div.search-results::-webkit-scrollbar-thumb:hover {
   background:  rgba(255, 255, 255, 0.8);
 }
 
@@ -176,7 +203,8 @@ body {
     color: #fff;
     width: 200px;
   }
-  form {
+
+.message_form {
     background: #222;
     input {
       background: rgba(255, 255, 255, 0.03);
@@ -192,6 +220,8 @@ body {
     }
   }
 }
+
+
 
 // Placeholder Styling
 ::-webkit-input-placeholder {

@@ -14,13 +14,15 @@ import { ToastrModule } from 'ngx-toastr';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { AngularMaterialModule } from './angular-material.module' //https://material.angular.io/guide/getting-started#step-4-include-a-theme
+import { CreategroupComponent } from 'src/app/dialogs/creategroup/creategroup.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    SignupComponent
+    SignupComponent,
+    CreategroupComponent
   ],
   imports: [
     BrowserModule,
@@ -42,6 +44,7 @@ import { AngularMaterialModule } from './angular-material.module' //https://mate
     multi: true
   }],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  entryComponents: [CreategroupComponent]
 })
 export class AppModule { }

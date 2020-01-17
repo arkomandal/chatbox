@@ -5,6 +5,9 @@ import { UserService } from 'src/app/services/user/user.service';
 import { MessageService } from 'src/app/services/message/message.service';
 import { SocketService } from 'src/app/services/socket/socket.service';
 
+import { MatDialog } from '@angular/material/dialog';
+import { CreategroupComponent } from 'src/app/dialogs/creategroup/creategroup.component'
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,23 +19,12 @@ export class DashboardComponent implements OnInit {
   selectedGroup: any = null;
   messages: any = [];
 
+  group_name: string = "";
 
   private page: number = 1;
-  private users: any = [];
   private messagesToShow: any = [];
   private totalCount: Number = 0;
   public isFullListDisplayed: boolean = false;
-
-  // messages1: any = [{
-  //   Name: 'George Clooney',
-  //   Message: "The only failure is not to try"
-  // }, {
-  //   Name: 'Seth Rogen',
-  //   Message: "I grew up in Vancouver, man. That's where more than half of my style comes from."
-  // }];
-  groupForm = this.fb.group({
-    group_name: ['', Validators.required]
-  });
 
   messageForm = this.fb.group({
     message: ['', Validators.required]
@@ -43,7 +35,8 @@ export class DashboardComponent implements OnInit {
     private storeservice: StoreService,
     private userservice: UserService,
     private messageService: MessageService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -77,8 +70,21 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  createGroup() {
-    this.userservice.createGroup(this.user.token, this.groupForm.value.group_name, [this.user._id]).subscribe(() => {
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CreategroupComponent, {
+      width: '250px',
+      data: { name: this.user.user_name, animal: this.group_name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.group_name = result;
+      if (this.group_name && this.group_name.trim() != "") this.createGroup(this.group_name);
+    });
+  }
+
+  createGroup(group_name) {
+    this.userservice.createGroup(this.user.token, group_name, [this.user._id]).subscribe(() => {
       this.getAllGroups();
     });
   }
