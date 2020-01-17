@@ -2,17 +2,18 @@
     <div class='chatbox'>
         <div class='chatbox__user-list' *ngIf="user">
             <h1>List of users and groups</h1>
-            <div class='chatbox__user--active' *ngFor="let group of groups">
-                <p (click)="getGroupMessages(group.group)">{{group.group.group_name}}</p>
-            </div>
-            <!-- <form [formGroup]="groupForm" (ngSubmit)="createGroup()">
-                <div class="row">
-                    <input type="text" class="form-control" formControlName="group_name" placeholder="Create new group"
-                        required>
-                    <button type="submit" [disabled]="!groupForm.valid" class="btn btn-primary px-4">Create</button>
-                </div>
-            </form> -->
+            <mat-nav-list class="user-scrollbar">
+                <mat-list-item *ngFor="let group of groups">
+                    <div class='chatbox__user--active'>
+                        <p (click)="getGroupMessages(group.group)">{{group.group.group_name}}</p>
+                    </div>
+                </mat-list-item>
+                <button mat-stroked-button color="accent" style="width: 100%;"
+                    (click)="openDialog()">Create New Group
+                </button>
+            </mat-nav-list>
         </div>
+
         <div *ngIf="selectedGroup && messages">
             <div class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
                 (scrolled)="onScroll()" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false">
@@ -26,8 +27,10 @@
                     </div>
                 </div>
             </div>
-            <form [formGroup]="messageForm" (keydown)="onSend($event)">
-                <input type="text" class="form-control" formControlName="message" placeholder="Enter your message" required>
+            <form [formGroup]="messageForm" (keydown)="onSend($event)" class="message_form">
+                <input type="text" class="form-control" formControlName="message" placeholder="Enter your message"
+                    required>
             </form>
         </div>
     </div>
+</div>
