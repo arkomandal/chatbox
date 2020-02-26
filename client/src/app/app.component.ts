@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { StoreService } from './services/store/store.service';
 import { SocketService } from './services/socket/socket.service';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -11,11 +12,13 @@ import { ToastrService } from 'ngx-toastr';
 export class AppComponent implements OnInit, OnChanges {
   user: any;
   token: string = null;
+  activeAuthRoute: boolean = true;
 
   constructor(
     private socketservice: SocketService,
     private storeservice: StoreService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private router: Router
   ) {
   }
 
@@ -44,6 +47,11 @@ export class AppComponent implements OnInit, OnChanges {
   logout() {
     this.storeservice.setAuthUser(null);
     this.toast.success('You are logged out.');
+  }
+
+  changeRoute(){
+    if (this.router.url.includes('/auth')) this.activeAuthRoute = true;
+    else if (this.router.url.includes('/signup')) this.activeAuthRoute = false;
   }
 
 }

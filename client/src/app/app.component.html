@@ -4,9 +4,14 @@
         <span *ngIf="isLoggedIn()"><a class="positronx">{{user.user_name}}</a></span>
     </div>
     <span class="nav-tool-items" *ngIf="!isLoggedIn()">
-        <a mat-button routerLink="login" routerLinkActive="active" routerLink="/auth">Log in</a>
-        <a mat-button mat-raised-button routerLink="register" routerLinkActive="active"
-            routerLink="/signup">Register</a>
+        <span *ngIf="activeAuthRoute" (click)="changeRoute()">
+            <a mat-button mat-raised-button routerLink="/auth">Log in</a>
+            <a mat-button routerLink="/signup">Register</a>
+        </span>
+        <span *ngIf="!activeAuthRoute" (click)="changeRoute()">
+            <a mat-button routerLink="/auth">Log in</a>
+            <a mat-button mat-raised-button routerLink="/signup">Register</a>
+        </span>
     </span>
     <span class="nav-tool-items" *ngIf="isLoggedIn()">
         <a mat-button routerLink="/auth" (click)="logout()">Logout</a>
