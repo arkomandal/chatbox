@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { StoreService } from 'src/app/services/store/store.service';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { StoreService } from 'src/app/shared/services/store/store.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 

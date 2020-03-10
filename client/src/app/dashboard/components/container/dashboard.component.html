@@ -8,15 +8,17 @@
                         <p (click)="getGroupMessages(group.group)">{{group.group.group_name}}</p>
                     </div>
                 </mat-list-item>
-                <button mat-stroked-button color="accent" style="width: 100%;"
-                    (click)="openDialog()">Create New Group
+                <button mat-stroked-button color="accent" style="width: 100%;" (click)="openDialog()">Create New Group
                 </button>
             </mat-nav-list>
         </div>
 
         <div *ngIf="selectedGroup && messages">
-            <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-                (scrolled)="onScroll()" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false">
+            {{selectedGroup?.group_name}} <app-moremenu [group]="selectedGroup" (output)="responseFromChild($event)"></app-moremenu>
+            <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="search-results" infiniteScroll
+                [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()"
+                [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false">
+
                 <div class="chatbox__messages" *ngFor="let message of messages">
                     <div class="chatbox__messages__user-message">
                         <div class="chatbox__messages__user-message--ind-message">

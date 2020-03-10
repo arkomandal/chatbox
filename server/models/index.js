@@ -4,7 +4,7 @@ var path = require('path');
 var mongoose = require("mongoose");
 var basename = path.basename(module.filename);
 var db = {};
-
+mongoose.set('useFindAndModify', false);
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/demo",
     { useUnifiedTopology: true, useNewUrlParser: true })
