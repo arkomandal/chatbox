@@ -15,7 +15,7 @@
         </div>
 
         <div *ngIf="selectedGroup && messages">
-            <div class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+            <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
                 (scrolled)="onScroll()" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false">
                 <div class="chatbox__messages" *ngFor="let message of messages">
                     <div class="chatbox__messages__user-message">
