@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Users yet to be added</h1>
+<div mat-dialog-content>
+    <div *ngFor="let user of users_not_added">
+        <mat-checkbox>{{user.user_name}}: {{user.phone}}</mat-checkbox>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="users_not_added" cdkFocusInitial>Add</button>
+</div>

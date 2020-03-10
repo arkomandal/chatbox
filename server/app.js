@@ -16,7 +16,7 @@ app.use(errorHandler);
 
 app.use('/group', require('./routes/group.route'));
 app.use('/user', require('./routes/user.route'));
-app.use('/map', require('./routes/group_user.route'));
+app.use('/map', require('./routes/map.route'));
 app.use('/message', require('./routes/message.route'));
 
 http.listen(PORT, () => {

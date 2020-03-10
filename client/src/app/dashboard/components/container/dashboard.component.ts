@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { StoreService } from 'src/app/services/store/store.service';
-import { UserService } from 'src/app/services/user/user.service';
-import { MessageService } from 'src/app/services/message/message.service';
-import { SocketService } from 'src/app/services/socket/socket.service';
+import { StoreService } from 'src/app/shared/services/store/store.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
+import { MessageService } from 'src/app/shared/services/message/message.service';
+import { SocketService } from 'src/app/shared/services/socket/socket.service';
 
 import { MatDialog } from '@angular/material/dialog';
-import { CreategroupComponent } from 'src/app/dialogs/creategroup/creategroup.component'
+import { CreategroupComponent } from 'src/app/dashboard/dialogs/creategroup/creategroup.component'
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'] //https://codepen.io/Jackthomsonn/pen/jWyGvX
+  styleUrls: ['./dashboard.component.scss'], //https://codepen.io/Jackthomsonn/pen/jWyGvX
+  // changeDetection: ChangeDetectionStrategy.Default
 })
 export class DashboardComponent implements OnInit {
   user: any;
@@ -37,7 +38,8 @@ export class DashboardComponent implements OnInit {
     private messageService: MessageService,
     private socketService: SocketService,
     public dialog: MatDialog
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.storeservice.getAuthUser().subscribe(user => {
@@ -57,7 +59,7 @@ export class DashboardComponent implements OnInit {
       this.page += 1;
       this.messageService.getMessages(2, this.selectedGroup._id, this.page).subscribe(data => {
         Array.prototype.push.apply(this.messages, data['messages']);
-        this.messagesToShow = this.messages;;
+        this.messagesToShow = this.messages;
       });
     } else {
       this.isFullListDisplayed = true;
@@ -115,5 +117,11 @@ export class DashboardComponent implements OnInit {
         this.messageForm.reset();
       });
     }
+  }
+
+  responseFromChild(data) {
+    this.selectedGroup = null;
+    this.getAllGroups();
+    this.resetMessages();
   }
 }

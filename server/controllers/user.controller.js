@@ -24,7 +24,7 @@ exports.create = async (req, res) => {
 };
 
 exports.findAll = async (req, res) => {
-    let records = 2,
+    let records = 10,
         limit = records * req.params.page,
         skip = limit - records;
     let filter = req.params.filter == 1 ? 1 : req.params.filter == 2 ? -1 : 1;
@@ -59,7 +59,11 @@ exports.findAll = async (req, res) => {
             group.group = await db.group.findById(group.group_id);
         }
     }
-    res.send(users);
+    const data = {
+        total: await db.user.count(),
+        users: users
+    };
+    res.send(data);
 };
 
 exports.findOne = async (req, res) => {

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
-import { StoreService } from './services/store/store.service';
-import { SocketService } from './services/socket/socket.service';
+import { StoreService } from './shared/services/store/store.service';
+import { SocketService } from './shared/services/socket/socket.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 

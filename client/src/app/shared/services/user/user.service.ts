@@ -17,6 +17,10 @@ export class UserService implements Gateway {
     return this.http.post(`${this.GATEWAY}/user/add`, body);
   }
 
+  public registeredUsers(groupId){
+    return this.http.get(`${this.GATEWAY}/map/users_by_group/${groupId}`);
+  }
+
   public createGroup(token, group_name, users) {
     return this.http.post(`${this.GATEWAY}/group/add`, {
       group_name, users
@@ -25,5 +29,16 @@ export class UserService implements Gateway {
 
   public getUserGroups(userId, token) {
     return this.http.get(`${this.GATEWAY}/user/${userId}`);
+  }
+
+  public addUserToGroup(groupId, userId) {
+    return this.http.post(`${this.GATEWAY}/map/add_user_to_group`, {
+      group_id: groupId,
+      user_id: userId
+    });
+  }
+
+  public removeUserFromGroup(groupId, userId) {
+    return this.http.delete(`${this.GATEWAY}/map/remove_user_from_group/${groupId}/${userId}`);
   }
 }
