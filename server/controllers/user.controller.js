@@ -60,7 +60,7 @@ exports.findAll = async (req, res) => {
         }
     }
     const data = {
-        total: await db.user.count(),
+        total: await db.user.countDocuments(),
         users: users
     };
     res.send(data);

@@ -1,5 +1,4 @@
 module.exports = (io) => {
-    console.log('connecting to sockets...');
     //socket configuration
     let onlineUsers = [];
     io.on('connection', function (socket) {
@@ -33,6 +32,6 @@ module.exports = (io) => {
             socket.emit('sender group message', { message, senderId, senderName }); //for all users of the group
         });
     });
-
+    console.log('sockets are ready');
     return io;
 }
