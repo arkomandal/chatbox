@@ -36,7 +36,7 @@ exports.findAll = async (req, res) => {
             { $skip: skip }
         ]);
         const data = {
-            total: await db.message.count(),
+            total: await db.message.countDocuments(),
             messages: messages.map(msg => {
                 return { message: msg.message, sender: msg.sender[0].user_name, senderId: msg.sender[0]._id, time: msg.createdAt };
             })
