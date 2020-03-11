@@ -8,3 +8,4 @@
 * confirmation from user before getting added into a group
 * send files
 * don't let sign in if already signed in. implement session out.
+* show mutual contacts from google contact and database like whatsapp
