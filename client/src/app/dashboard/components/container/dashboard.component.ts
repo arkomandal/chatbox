@@ -7,6 +7,7 @@ import { SocketService } from 'src/app/shared/services/socket/socket.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { CreategroupComponent } from 'src/app/dashboard/dialogs/creategroup/creategroup.component'
+import { DashboardStoreService } from '../../services/store/dashboardstore.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,9 +32,12 @@ export class DashboardComponent implements OnInit {
     message: ['', Validators.required]
   });
 
+  userTypingMessage: string = "";
+
   constructor(
     private fb: FormBuilder,
     private storeservice: StoreService,
+    private dashboardStoreService: DashboardStoreService,
     private userservice: UserService,
     private messageService: MessageService,
     private socketService: SocketService,
@@ -45,11 +49,14 @@ export class DashboardComponent implements OnInit {
     this.storeservice.getAuthUser().subscribe(user => {
       this.user = user
     });
+    this.socketService.getsocket().on('typing', (data) => {
+      this.userTypingMessage = `${data.senderName} is typing...`;
+      setTimeout(() => {
+        this.userTypingMessage = "";
+      }, 1000);
+    });
     this.socketService.getsocket().on('group message', (data) => {
       this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
-    });
-    this.socketService.getsocket().on('sender group message', (data) => {
-      this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId });
     });
     this.getAllGroups();
   }
@@ -93,12 +100,21 @@ export class DashboardComponent implements OnInit {
   getGroupMessages(group) {
     this.selectedGroup = group;
     this.resetMessages();
-    this.socketService.getsocket().emit('assign users', group._id);
+
+    //leaving previous group
+    const subscription = this.dashboardStoreService.getCurrentGroup().subscribe((data) => {
+      this.socketService.getsocket().emit('unsubscribe', data);
+    });
+    subscription.unsubscribe();
+
+    //entering new group
+    this.socketService.getsocket().emit('subscribe', group._id);
     this.messageService.getMessages(2, group._id, this.page).subscribe(data => {
       //infinite scroll
       Array.prototype.push.apply(this.messages, data['messages']);
       this.totalCount = data['total'];
       this.messagesToShow = this.messages;
+      this.dashboardStoreService.setCurrentGroup(group._id);
     });
   }
 
@@ -107,6 +123,7 @@ export class DashboardComponent implements OnInit {
     this.messagesToShow = [];
     this.page = 1;
     this.isFullListDisplayed = false;
+    this.userTypingMessage = "";
   }
 
   onSend(event) {
@@ -115,6 +132,8 @@ export class DashboardComponent implements OnInit {
         this.socketService.getsocket().emit('send group message', this.selectedGroup._id, this.user._id, this.user.user_name, this.messageForm.value.message, data['createdAt']);
         this.messageForm.reset();
       });
+    } else {
+      this.socketService.getsocket().emit('typing', this.selectedGroup._id, this.user.user_name);
     }
   }
 
