@@ -10,7 +10,7 @@ export interface DialogData {
   styleUrls: ['./addcontacts.component.scss']
 })
 export class AddcontactsComponent implements OnInit {
-  private users_not_added: any = [];
+  private users: any = [];
 
   constructor(
     public dialogRef: MatDialogRef<AddcontactsComponent>,
@@ -20,7 +20,7 @@ export class AddcontactsComponent implements OnInit {
 
   ngOnInit() {
     this.userService.registeredUsers(this.data['groupId']).subscribe(data => {
-      this.users_not_added = data['users_not_added'];
+      this.users = data;
     });
   }
 

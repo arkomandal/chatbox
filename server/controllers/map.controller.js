@@ -2,9 +2,14 @@ const db = require('../models/index');
 const ObjectId = db.ObjectId; //it is assigned in models/index
 
 exports.addUserToGroup = async (req, res) => {
-    const group_user = new db.group_user(req.body);
-    await group_user.save();
-    res.send(group_user);
+    const { group_id, user_id } = req.body;
+    let data = [];
+    for await (let user of user_id) {
+        data.push({ group_id, user_id: user });
+        const group_user = new db.group_user({ group_id, user_id: user });
+        await group_user.save();
+    }
+    res.send(data);
 };
 
 exports.removeUserFromGroup = async (req, res) => {
@@ -14,8 +19,7 @@ exports.removeUserFromGroup = async (req, res) => {
 }
 
 exports.usersByGroup = async (req, res) => {
-    const { groupId } = req.params;
-    let groups = await db.group.aggregate([
+    let usersByAGroup = await db.group.aggregate([
         {
             $lookup:
             {
@@ -25,18 +29,16 @@ exports.usersByGroup = async (req, res) => {
                 as: "group_users"
             }
         },
-        { $match: { _id: ObjectId(groupId) } }
+        { $match: { _id: ObjectId(req.params.groupId) } }
     ]);
-    for (let group of groups) {
-        for (user of group.group_users) {
-            user.user = await db.user.findById(user.user_id);
-        }
-    }
-    let users_added = groups[0].group_users.map(el => {
-        return ObjectId(el.user_id);
+    let users_added = usersByAGroup[0].group_users.map(el => {
+        return el.user_id.toString();
     });
-    let users_not_added = await db.user.find({ "_id": { "$nin": users_added } })
-    res.send({
-        users_not_added
-    })
+    let users = await db.user.aggregate([{ $match: {} }]);
+    users = users.map(user => {
+        return users_added.includes(user._id.toString()) ?
+            { ...user, checked: true, disabled: true } :
+            { ...user, checked: false, disabled: false };
+    });
+    res.send(users);
 }
