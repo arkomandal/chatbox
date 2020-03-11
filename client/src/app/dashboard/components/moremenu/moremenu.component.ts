@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { StoreService } from 'src/app/shared/services/store/store.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddcontactsComponent } from '../../dialogs/addcontacts/addcontacts.component'
+import { SocketService } from 'src/app/shared/services/socket/socket.service';
 
 @Component({
   selector: 'app-moremenu',
@@ -18,7 +19,8 @@ export class MoremenuComponent implements OnInit {
     public dialog: MatDialog,
     private storeservice: StoreService,
     private toast: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private socketService: SocketService
   ) { }
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class MoremenuComponent implements OnInit {
       this.storeservice.getAuthUser().subscribe(user => {
         this.userService.removeUserFromGroup(this.group._id, user._id).subscribe(data => {
           if (data) {
+            this.socketService.getsocket().emit('unsubscribe', this.group._id);
             this.output.emit(data);
             this.toast.info("You've left");
           }
