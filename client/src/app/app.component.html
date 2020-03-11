@@ -1,7 +1,8 @@
 <mat-toolbar color="primary" class="app-header">
     <div>
-        <span *ngIf="!isLoggedIn()"><a class="positronx">Welcome</a></span>
-        <span *ngIf="isLoggedIn()"><a class="positronx">{{user.user_name}}</a></span>
+        <span><a class="positronx">FRIENDS</a></span>
+        <!-- <span *ngIf="!isLoggedIn()"><a class="positronx">Welcome</a></span>
+        <span *ngIf="isLoggedIn()"><a class="positronx">{{user.user_name}}</a></span> -->
     </div>
     <span class="nav-tool-items" *ngIf="!isLoggedIn()">
         <span *ngIf="activeAuthRoute" (click)="changeRoute()">
