@@ -46,10 +46,10 @@ export class DashboardComponent implements OnInit {
       this.user = user
     });
     this.socketService.getsocket().on('group message', (data) => {
-      this.messages.push({ message: data.message, sender: data.sender, time: data.time })
+      this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
     });
     this.socketService.getsocket().on('sender group message', (data) => {
-      this.messages.push({ message: data.message, sender: data.sender, time: data.time });
+      this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId });
     });
     this.getAllGroups();
   }
@@ -79,7 +79,6 @@ export class DashboardComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.group_name = result;
       if (this.group_name && this.group_name.trim() != "") this.createGroup(this.group_name);
     });
@@ -113,7 +112,7 @@ export class DashboardComponent implements OnInit {
   onSend(event) {
     if (event.keyCode == 13) {
       this.messageService.setMessage(this.user.token, this.user._id, 2, this.selectedGroup._id, this.messageForm.value.message).subscribe(data => {
-        this.socketService.getsocket().emit('send group message', this.selectedGroup._id, this.user.user_name, this.messageForm.value.message, data['createdAt']);
+        this.socketService.getsocket().emit('send group message', this.selectedGroup._id, this.user._id, this.user.user_name, this.messageForm.value.message, data['createdAt']);
         this.messageForm.reset();
       });
     }

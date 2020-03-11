@@ -118,26 +118,26 @@ body {
   border-radius: 0.2em;
   position: relative;
   box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
-  &__messages {
-    &:nth-of-type(odd) .chatbox__messages__user-message--ind-message {
-      float: left;
+  // &__messages {
+  //   &:nth-of-type(odd) .chatbox__messages__user-message--ind-message {
+      // float: left;
       // &:after {
       //   content: "";
       //   position: absolute;
       //   margin: -1.5em -17.06em;
       //   @include triangle(rgba(255, 255, 255, 0.2), 10, left);
       // }
-    }
-    &:nth-of-type(even) .chatbox__messages__user-message--ind-message {
-      float: right;
+    // }
+    // &:nth-of-type(even) .chatbox__messages__user-message--ind-message {
+      // float: right;
       // &:after {
       //   content: "";
       //   position: absolute;
       //   margin: -1.5em 1.87em;
       //   @include triangle(rgba(255, 255, 255, 0.2), 10, right);
       // }
-    }
-  }
+    // }
+  // }
   &__messages__user-message {
     width: 100%; //pushes the message box from left side (650px)
   }

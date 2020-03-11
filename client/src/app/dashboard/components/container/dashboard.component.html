@@ -14,18 +14,27 @@
         </div>
 
         <div *ngIf="selectedGroup && messages">
-            {{selectedGroup?.group_name}} <app-moremenu [group]="selectedGroup" (output)="responseFromChild($event)"></app-moremenu>
+            {{selectedGroup?.group_name}} <app-moremenu [group]="selectedGroup" (output)="responseFromChild($event)">
+            </app-moremenu>
             <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="search-results" infiniteScroll
                 [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()"
                 [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false">
 
                 <div class="chatbox__messages" *ngFor="let message of messages">
                     <div class="chatbox__messages__user-message">
-                        <div class="chatbox__messages__user-message--ind-message">
-                            <p class="name">{{message.sender}}</p>
+                        <div *ngIf="message.senderId == this.user._id; else others"
+                            class="chatbox__messages__user-message--ind-message" style="float: right">
+                            <p class="name">You</p>
                             <br />
                             <p class="message">{{message.message}}</p>
                         </div>
+                        <ng-template #others>
+                            <div class="chatbox__messages__user-message--ind-message" style="float: left">
+                                <p class="name">{{message.sender}}</p>
+                                <br />
+                                <p class="message">{{message.message}}</p>
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
             </div>

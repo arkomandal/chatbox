@@ -38,7 +38,7 @@ exports.findAll = async (req, res) => {
         const data = {
             total: await db.message.count(),
             messages: messages.map(msg => {
-                return { message: msg.message, sender: msg.sender[0].user_name, time: msg.createdAt };
+                return { message: msg.message, sender: msg.sender[0].user_name, senderId: msg.sender[0]._id, time: msg.createdAt };
             })
         };
         res.send(data);
