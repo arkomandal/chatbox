@@ -1,28 +1,21 @@
+const db = require('../models');
 module.exports = (io) => {
-    //socket configuration
-    let onlineUsers = [];
-    //socket is a tab with same port
-    io.on('connection', function (socket) {
-        // socket.on('user name', (user) => {
-        //     const details = { profileName: user.profileName, sessionId: socket.id };
-        //     onlineUsers.push(details);
-        //     io.emit('connectedUsers', onlineUsers); //io.sockets.emit == io.emit
-        // });
+    io.on('connection', function (socket) { //socket is a tab with same port
 
-        // socket.on('disconnect', function () {
-        //     onlineUsers = onlineUsers.filter((user) => user.sessionId !== socket.id);
-        //     io.emit('connectedUsers', onlineUsers);
-        //     // socket.leave(group);
-        // });
+        //session management (this is for same user in another tab/socket)
+        socket.on('sessionOut', function (data) {
+            io.to(data.socket_id).emit('sessionOut', { socket_id: data.socket_id });
+        });
 
-        // //personal chat
-        // socket.on('chatting', function (message, sender, receiver) {
-        //     socket.to(receiver).emit('receiverPeer', message, socket.id, receiver);
-        //     socket.emit('senderPeer', message, socket.id, receiver);
-        // });
+        //connection management
+        socket.on('connectedUsers', async function (data) {
+            const session = await db.session.aggregate([{
+                $match: {}
+            }]);
+            io.emit('connectedUsers', { users: session });
+        }); //for showing online users (not implemented)
 
-
-        //group chat
+        //group chat management
         socket.on('subscribe', function (group) {
             socket.join(group);
         });
@@ -36,14 +29,9 @@ module.exports = (io) => {
             socket.in(group).emit('typing', { senderName }); //send to room excluding you (socket)
         });
 
-        //session management
-        socket.on('sessionOut', function (data) {
-            io.to(data.socket_id).emit('sessionOut', { socket_id: data.socket_id });
-        });
-
-        //connection management
-        
     });
+
     console.log('sockets are ready');
+
     return io;
 }

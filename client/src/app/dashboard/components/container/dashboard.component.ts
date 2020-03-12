@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.storeservice.getAuthUser().subscribe(user => {
-      this.user = user
+      this.user = user;
     });
     this.socketService.getsocket().on('typing', (data) => {
       this.userTypingMessage = `${data.senderName} is typing...`;
@@ -60,6 +60,7 @@ export class DashboardComponent implements OnInit {
     });
     this.socketService.getsocket().on('group message', (data) => {
       this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
+      this.setScroll();
     });
     this.getAllGroups();
   }

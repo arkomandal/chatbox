@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
       if (!session['active']) {
         this.authenticate();
       } else {
-        if (confirm('Session ongoing! Logout from other sessions and continue?')) {
+        if (confirm('Sessions ongoing! Logout from other sessions and continue?')) {
           this.authservice.sessionOut({ userId: session['userId'] }).subscribe(_ => {
             this.socketService.getsocket().emit('sessionOut', {
               socket_id: session['socket_id']
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       this.toast.success('Logged In!');
       this.storeservice.setAuthUser(data);
     }, (err) => {
-      this.toast.warning(JSON.stringify(err))
+      this.toast.warning(JSON.stringify(err));
     }, () => {
       this.router.navigate(['/dashboard']);
     });
