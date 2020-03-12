@@ -21,6 +21,7 @@ module.exports = (io) => {
         //     socket.emit('senderPeer', message, socket.id, receiver);
         // });
 
+
         //group chat
         socket.on('subscribe', function (group) {
             socket.join(group);
@@ -34,6 +35,14 @@ module.exports = (io) => {
         socket.on('typing', function (group, senderName) {
             socket.in(group).emit('typing', { senderName }); //send to room excluding you (socket)
         });
+
+        //session management
+        socket.on('sessionOut', function (data) {
+            io.to(data.socket_id).emit('sessionOut', { socket_id: data.socket_id });
+        });
+
+        //connection management
+        
     });
     console.log('sockets are ready');
     return io;

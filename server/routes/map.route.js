@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const map = require('../controllers/map.controller.js');
 
 router.post('/add_user_to_group', map.addUserToGroup);
