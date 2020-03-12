@@ -1,13 +1,6 @@
 const db = require('../models/index');
 const ObjectId = db.ObjectId;
-const authService = require('./auth.service');
 const bcrypt = require('bcrypt');
-
-exports.authenticate = (req, res, next) => {
-    authService.authenticate(req.body)
-        .then(user => user ? res.json(user) : res.status(400).json({ message: 'Username or password is incorrect' }))
-        .catch(err => next(err));
-}
 
 exports.create = async (req, res) => {
     const { user_name, phone, password } = req.body;

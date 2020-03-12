@@ -9,17 +9,21 @@ const jwt = require('./jwt/jwt');
 const errorHandler = require('./jwt/error-handler');
 const socket = require('./sockets');
 
+//middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(jwt());
 app.use(errorHandler);
 
-app.use('/group', require('./routes/group.route'));
+//routes
+app.use('/session', require('./routes/session.route'));
 app.use('/user', require('./routes/user.route'));
+app.use('/group', require('./routes/group.route'));
 app.use('/map', require('./routes/map.route'));
 app.use('/message', require('./routes/message.route'));
 
+//listen
 http.listen(PORT, () => {
     console.log("Server is listening on port ", PORT);
     socket(io);

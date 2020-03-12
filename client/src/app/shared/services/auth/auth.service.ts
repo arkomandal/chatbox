@@ -14,6 +14,14 @@ export class AuthService implements Gateway {
   }
 
   public authenticate(body) {
-    return this.http.post(`${this.GATEWAY}/user/authenticate`, body)
+    return this.http.post(`${this.GATEWAY}/session/create`, body);
+  }
+
+  public sessionStatus(body) {
+    return this.http.post(`${this.GATEWAY}/session/status`, body); //if it was GET request, password would be seen
+  }
+
+  public sessionOut(body) {
+    return this.http.post(`${this.GATEWAY}/session/delete`, body);
   }
 }
