@@ -36,7 +36,7 @@ export class MoremenuComponent implements OnInit {
       if (result) {
         let ids = result.filter(el => el.checked && !el.disabled).map(el => el._id);
         this.userService.addUserToGroup(this.group._id, ids).subscribe(data => {
-          if (data) this.toast.info("Successfully added");
+          if (data) this.toast.success("Successfully added");
           else this.toast.warning("Please try again");
         }, () => {
           this.toast.warning("Please try again");
@@ -52,7 +52,7 @@ export class MoremenuComponent implements OnInit {
           if (data) {
             this.socketService.getsocket().emit('unsubscribe', this.group._id);
             this.output.emit(data);
-            this.toast.info("You've left");
+            this.toast.success("You've left");
           }
         }, () => {
           this.toast.warning("Please try again");

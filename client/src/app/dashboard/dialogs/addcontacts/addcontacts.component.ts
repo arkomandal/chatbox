@@ -11,7 +11,7 @@ export interface DialogData {
   styleUrls: ['./addcontacts.component.scss']
 })
 export class AddcontactsComponent implements OnInit {
-  private users: any = [];
+  public users: any = []; //couldn't make private since it is the data passed into parent component
   private current_user: string = "";
 
   constructor(
@@ -23,11 +23,13 @@ export class AddcontactsComponent implements OnInit {
 
   ngOnInit() {
     this.storeService.getAuthUser().subscribe((this_user) => {
-      this.current_user = this_user._id;
-      this.userService.registeredUsers(this.data['groupId']).subscribe(data => {
-        this.users = data;
-        this.users = this.users.map(user => user._id == this.current_user ? { ...user, user_name: 'You' } : user)
-      });
+      if (this_user) {
+        this.current_user = this_user._id;
+        this.userService.registeredUsers(this.data['groupId']).subscribe(data => {
+          this.users = data;
+          this.users = this.users.map(user => user._id == this.current_user ? { ...user, user_name: 'You' } : user)
+        });
+      }
     });
   }
 

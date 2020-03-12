@@ -4,12 +4,10 @@ import { LoginRoutingModule } from './login-routing.module';
 import { SharedModule } from '../../shared/modules/shared.module';
 
 import { LoginComponent } from '../components/container/login.component';
-import { SessionoutComponent } from '../dialogs/sessionout/sessionout.component'
 
 @NgModule({
   declarations: [
-    LoginComponent,
-    SessionoutComponent
+    LoginComponent
   ],
   imports: [
     CommonModule,
@@ -17,6 +15,6 @@ import { SessionoutComponent } from '../dialogs/sessionout/sessionout.component'
     LoginRoutingModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [SessionoutComponent]
+  entryComponents: []
 })
 export class LoginModule { }
