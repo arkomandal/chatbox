@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       this.toast.success('Logged In!');
       this.storeservice.setAuthUser(data);
     }, (err) => {
-      this.toast.warning(JSON.stringify(err));
+      this.toast.warning(err.error ? err.error.message : err);
     }, () => {
       this.router.navigate(['/dashboard']);
     });
