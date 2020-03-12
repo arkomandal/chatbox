@@ -16,6 +16,9 @@ import { DashboardStoreService } from '../../services/store/dashboardstore.servi
   // changeDetection: ChangeDetectionStrategy.Default
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('scrollMe', { static: false }) private myScrollContainer: ElementRef;
+  scrollHeight: number = 0;
+
   user: any;
   groups: any = [];
   selectedGroup: any = null;
@@ -67,6 +70,7 @@ export class DashboardComponent implements OnInit {
       this.messageService.getMessages(2, this.selectedGroup._id, this.page).subscribe(data => {
         Array.prototype.push.apply(this.messages, data['messages']);
         this.messagesToShow = this.messages;
+        this.setScroll();
       });
     } else {
       this.isFullListDisplayed = true;
@@ -115,7 +119,12 @@ export class DashboardComponent implements OnInit {
       this.totalCount = data['total'];
       this.messagesToShow = this.messages;
       this.dashboardStoreService.setCurrentGroup(group._id);
+      this.setScroll();
     });
+  }
+
+  setScroll(){
+    setTimeout(() => this.scrollHeight = this.myScrollContainer.nativeElement.scrollHeight, 0);
   }
 
   resetMessages() {

@@ -1,4 +1,3 @@
-* implement view child in infinite scroll
 * don't remove user if he leaves a group. change status only. else chats will be affected
 * show messages for user left, user online
 
