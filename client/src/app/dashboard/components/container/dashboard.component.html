@@ -5,7 +5,10 @@
             <mat-nav-list class="user-scrollbar">
                 <mat-list-item *ngFor="let group of groups">
                     <div class='chatbox__user--active'>
-                        <p (click)="getGroupMessages(group.group)">{{group.group.group_name}}</p>
+                        <button [disabled]="selectedGroup?._id == group.group._id"
+                            (click)="getGroupMessages(group.group)">
+                            {{group.group.group_name}}
+                        </button>
                     </div>
                 </mat-list-item>
                 <button mat-stroked-button color="accent" style="width: 100%;" (click)="openDialog()">Create New Group
@@ -18,9 +21,9 @@
             <app-moremenu [group]="selectedGroup" (output)="responseFromChild($event)">
             </app-moremenu>
             {{userTypingMessage}}
-            <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="search-results" infiniteScroll
-                [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()"
-                [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false">
+            <div #scrollMe [scrollTop]="scrollHeight" class="search-results" infiniteScroll [infiniteScrollDistance]="2"
+                [infiniteScrollThrottle]="50" (scrolled)="onScroll()" [infiniteScrollDisabled]="isFullListDisplayed"
+                [scrollWindow]="false">
 
                 <div class="chatbox__messages" *ngFor="let message of messages">
                     <div class="chatbox__messages__user-message">
