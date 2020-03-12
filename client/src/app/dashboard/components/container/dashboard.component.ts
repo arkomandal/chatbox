@@ -7,13 +7,12 @@ import { SocketService } from 'src/app/shared/services/socket/socket.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { CreategroupComponent } from 'src/app/dashboard/dialogs/creategroup/creategroup.component'
-import { DashboardStoreService } from '../../services/store/dashboardstore.service';
+import { DashboardStoreService } from '../../services/dashboardstore/dashboardstore.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'], //https://codepen.io/Jackthomsonn/pen/jWyGvX
-  // changeDetection: ChangeDetectionStrategy.Default
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('scrollMe', { static: false }) private myScrollContainer: ElementRef;
@@ -124,7 +123,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  setScroll(){
+  setScroll() {
     setTimeout(() => this.scrollHeight = this.myScrollContainer.nativeElement.scrollHeight, 0);
   }
 
