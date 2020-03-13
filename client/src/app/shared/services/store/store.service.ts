@@ -15,4 +15,12 @@ export class StoreService {
   getAuthUser() {
     return this.auth_user;
   }
+
+  private connectedUsers = new BehaviorSubject([]);
+  setConnectedUsers(data) {
+    this.connectedUsers.next(data);
+  }
+  getConnectedUsers() {
+    return this.connectedUsers;
+  }
 }

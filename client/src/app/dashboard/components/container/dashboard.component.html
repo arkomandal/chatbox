@@ -6,7 +6,7 @@
             </h1>
             <mat-nav-list class="user-scrollbar" *ngIf="listType == 1">
                 <mat-list-item *ngFor="let group of groups">
-                    <div class='chatbox__user--active'>
+                    <div class='chatbox__user--busy'>
                         <button [disabled]="selectedGroup?._id == group.group._id"
                             (click)="getGroupMessages(group.group)">
                             {{group.group.group_name}}
@@ -18,11 +18,18 @@
             </mat-nav-list>
             <mat-nav-list class="user-scrollbar" *ngIf="listType == 2">
                 <mat-list-item *ngFor="let user of users">
-                    <div class='chatbox__user--active'>
+                    <div class='chatbox__user--active' *ngIf="user.active; else inactiveUser">
                         <button [disabled]="selectedUser?._id == user._id" (click)="getUserMessages(user)">
                             {{user.user_name}}
                         </button>
                     </div>
+                    <ng-template #inactiveUser>
+                        <div class='chatbox__user--away'>
+                            <button [disabled]="selectedUser?._id == user._id" (click)="getUserMessages(user)">
+                                {{user.user_name}}
+                            </button>
+                        </div>
+                    </ng-template>
                 </mat-list-item>
                 <button mat-stroked-button color="accent" style="width: 100%;" (click)="openDialog()">Create New Group
                 </button>
