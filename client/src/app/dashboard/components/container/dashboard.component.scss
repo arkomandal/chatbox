@@ -17,12 +17,12 @@ mat-nav-list.user-scrollbar::-webkit-scrollbar-track {
 }
 /* Handle */
 mat-nav-list.user-scrollbar::-webkit-scrollbar-thumb {
-  background:  rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   // border-radius: 10px;
 }
 /* Handle on hover */
 mat-nav-list.user-scrollbar::-webkit-scrollbar-thumb:hover {
-  background:  rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .search-results {
@@ -42,12 +42,12 @@ div.search-results::-webkit-scrollbar-track {
 }
 /* Handle */
 div.search-results::-webkit-scrollbar-thumb {
-  background:  rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 2px;
 }
 /* Handle on hover */
 div.search-results::-webkit-scrollbar-thumb:hover {
-  background:  rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 // Variables
@@ -109,6 +109,11 @@ body {
     color: #fff;
     text-align: center;
   }
+  input {
+    margin: 0.5em auto;
+    color: #fff;
+    text-align: center;
+  }
 }
 
 .chatbox {
@@ -120,23 +125,23 @@ body {
   box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
   // &__messages {
   //   &:nth-of-type(odd) .chatbox__messages__user-message--ind-message {
-      // float: left;
-      // &:after {
-      //   content: "";
-      //   position: absolute;
-      //   margin: -1.5em -17.06em;
-      //   @include triangle(rgba(255, 255, 255, 0.2), 10, left);
-      // }
-    // }
-    // &:nth-of-type(even) .chatbox__messages__user-message--ind-message {
-      // float: right;
-      // &:after {
-      //   content: "";
-      //   position: absolute;
-      //   margin: -1.5em 1.87em;
-      //   @include triangle(rgba(255, 255, 255, 0.2), 10, right);
-      // }
-    // }
+  // float: left;
+  // &:after {
+  //   content: "";
+  //   position: absolute;
+  //   margin: -1.5em -17.06em;
+  //   @include triangle(rgba(255, 255, 255, 0.2), 10, left);
+  // }
+  // }
+  // &:nth-of-type(even) .chatbox__messages__user-message--ind-message {
+  // float: right;
+  // &:after {
+  //   content: "";
+  //   position: absolute;
+  //   margin: -1.5em 1.87em;
+  //   @include triangle(rgba(255, 255, 255, 0.2), 10, right);
+  // }
+  // }
   // }
   &__messages__user-message {
     width: 100%; //pushes the message box from left side (650px)
@@ -214,7 +219,7 @@ body {
     width: 200px;
   }
 
-.message_form {
+  .message_form {
     background: #222;
     input {
       background: rgba(255, 255, 255, 0.03);
@@ -230,8 +235,6 @@ body {
     }
   }
 }
-
-
 
 // Placeholder Styling
 ::-webkit-input-placeholder {

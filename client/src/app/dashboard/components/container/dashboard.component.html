@@ -1,13 +1,26 @@
 <div class='container'>
     <div class='chatbox'>
         <div class='chatbox__user-list' *ngIf="user">
-            <h1>List of users and groups</h1>
-            <mat-nav-list class="user-scrollbar">
+            <h1>
+                <button (click)="setList(1)">Groups</button> | <button (click)="setList(2)">Users</button>
+            </h1>
+            <mat-nav-list class="user-scrollbar" *ngIf="listType == 1">
                 <mat-list-item *ngFor="let group of groups">
                     <div class='chatbox__user--active'>
                         <button [disabled]="selectedGroup?._id == group.group._id"
                             (click)="getGroupMessages(group.group)">
                             {{group.group.group_name}}
+                        </button>
+                    </div>
+                </mat-list-item>
+                <button mat-stroked-button color="accent" style="width: 100%;" (click)="openDialog()">Create New Group
+                </button>
+            </mat-nav-list>
+            <mat-nav-list class="user-scrollbar" *ngIf="listType == 2">
+                <mat-list-item *ngFor="let user of users">
+                    <div class='chatbox__user--active'>
+                        <button [disabled]="selectedUser?._id == user._id" (click)="getUserMessages(user)">
+                            {{user.user_name}}
                         </button>
                     </div>
                 </mat-list-item>
