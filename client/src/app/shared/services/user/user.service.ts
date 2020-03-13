@@ -17,6 +17,10 @@ export class UserService implements Gateway {
     return this.http.post(`${this.GATEWAY}/user/add`, body);
   }
 
+  public getAllUsers(){
+    return this.http.get(`${this.GATEWAY}/user/list/full`);
+  }
+
   public registeredUsers(groupId){
     return this.http.get(`${this.GATEWAY}/map/users_by_group/${groupId}`);
   }

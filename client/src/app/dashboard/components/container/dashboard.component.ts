@@ -18,9 +18,12 @@ export class DashboardComponent implements OnInit {
   @ViewChild('scrollMe', { static: false }) private myScrollContainer: ElementRef;
   scrollHeight: number = 0;
 
+  listType: number = 1;
+  users: any = [];
   user: any;
   groups: any = [];
   selectedGroup: any = null;
+  selectedUser: any = null;
   messages: any = [];
 
   group_name: string = "";
@@ -62,6 +65,7 @@ export class DashboardComponent implements OnInit {
       this.setScroll();
     });
     this.getAllGroups();
+    this.getAllUsers();
   }
 
   onScroll() {
@@ -77,9 +81,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  setList(type) {
+    this.listType = type;
+  }
+
   getAllGroups() {
     this.userservice.getUserGroups(this.user._id, this.user.token).subscribe(data => {
       this.groups = data[0]['group_users'];
+    });
+  }
+
+  getAllUsers() {
+    this.userservice.getAllUsers().subscribe(data => {
+      this.users = data;
     });
   }
 
@@ -99,6 +113,11 @@ export class DashboardComponent implements OnInit {
     this.userservice.createGroup(this.user.token, group_name, [this.user._id]).subscribe(() => {
       this.getAllGroups();
     });
+  }
+
+  getUserMessages(user){
+    this.selectedUser = user;
+    this.resetMessages();
   }
 
   getGroupMessages(group) {
