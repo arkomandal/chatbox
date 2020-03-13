@@ -59,8 +59,10 @@ exports.findAll = async (req, res) => {
     res.send(data);
 };
 
-exports.getFullList = async (req, res) => {
-    let users = await db.user.aggregate([{ $match: {} }]);
+exports.getOtherUsers = async (req, res) => {
+    let users = await db.user.aggregate([{
+        $match: { _id: { '$ne': ObjectId(req.params.userId) } }
+    }]);
     res.send(users);
 };
 

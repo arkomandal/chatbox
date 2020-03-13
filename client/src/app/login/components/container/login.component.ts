@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
   authenticate() {
     this.authservice.authenticate({ ...this.loginForm.value, socket_id: this.socketService.getsocket().id }).subscribe(data => {
       this.toast.success('Logged In!');
+      this.socketService.getsocket().emit('connectedUsers');
       this.storeservice.setAuthUser(data);
     }, (err) => {
       this.toast.warning(err.error ? err.error.message : err);

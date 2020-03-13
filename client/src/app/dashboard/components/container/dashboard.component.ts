@@ -53,6 +53,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.storeservice.getAuthUser().subscribe(user => {
       this.user = user;
+      this.getAllGroups();
+      this.getAllUsers();
     });
     this.socketService.getsocket().on('typing', (data) => {
       this.userTypingMessage = `${data.senderName} is typing...`;
@@ -64,8 +66,7 @@ export class DashboardComponent implements OnInit {
       this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
       this.setScroll();
     });
-    this.getAllGroups();
-    this.getAllUsers();
+    this.setConnectedUsers();
   }
 
   onScroll() {
@@ -92,8 +93,16 @@ export class DashboardComponent implements OnInit {
   }
 
   getAllUsers() {
-    this.userservice.getAllUsers().subscribe(data => {
+    this.userservice.getOtherUsers(this.user._id).subscribe(data => {
       this.users = data;
+    }, () => { }, () => {
+      this.setConnectedUsers();
+    });
+  }
+
+  setConnectedUsers() {
+    this.storeservice.getConnectedUsers().subscribe(users => {
+      this.users = this.users.map(user => users.includes(user._id) ? { ...user, active: true } : { ...user, active: false });
     });
   }
 
@@ -115,7 +124,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getUserMessages(user){
+  getUserMessages(user) {
     this.selectedUser = user;
     this.resetMessages();
   }

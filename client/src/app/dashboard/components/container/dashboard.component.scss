@@ -54,9 +54,9 @@ div.search-results::-webkit-scrollbar-thumb:hover {
 $primary: rgba(23, 190, 187, 1);
 $secondary: rgba(240, 166, 202, 1);
 
-$active: rgba(23, 190, 187, 0.8);
-$busy: rgba(252, 100, 113, 0.8);
-$away: rgba(255, 253, 130, 0.8);
+$active: rgba(39, 255, 20, 0.8);
+$busy: rgba(0, 238, 255, 0.8);
+$away: rgba(255, 13, 13, 0.932);
 
 // Triangle Mixin
 @mixin triangle($color, $size, $direction) {

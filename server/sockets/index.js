@@ -8,12 +8,14 @@ module.exports = (io) => {
         });
 
         //connection management
-        socket.on('connectedUsers', async function (data) {
-            const session = await db.session.aggregate([{
-                $match: {}
-            }]);
-            io.emit('connectedUsers', { users: session });
-        }); //for showing online users (not implemented)
+        socket.on('connectedUsers', async function () {
+            const users = await db.session.aggregate([{$match: {}}]);
+            io.emit('connectedUsers', { users: users });
+        });
+        socket.on('disconnect', async function () {
+        const users = await db.session.aggregate([{$match: {}}]);
+            io.emit('connectedUsers', { users: users });
+        });
 
         //group chat management
         socket.on('subscribe', function (group) {
