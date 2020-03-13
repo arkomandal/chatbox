@@ -17,6 +17,14 @@ module.exports = (io) => {
             io.emit('connectedUsers', { users: users });
         });
 
+        //personal chat management
+        socket.on('messagePersonal', function (data) {
+            io.to(data.socket_id).emit('messagePersonal', { socket_id: data.socket_id });
+        });
+        socket.on('typingPersonal', function (data) {
+            io.to(data.socket_id).emit('typingPersonal', { socket_id: data.socket_id });
+        });
+
         //group chat management
         socket.on('subscribe', function (group) {
             socket.join(group);

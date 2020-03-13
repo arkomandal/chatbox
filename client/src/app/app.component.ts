@@ -37,8 +37,7 @@ export class AppComponent implements OnInit {
       this.token = data ? data['token'] : null;
     });
     this.socketservice.getsocket().on('connectedUsers', (data) => {
-      const connectedUsers = data.users.map(user => user.user_id);
-      this.storeservice.setConnectedUsers(connectedUsers);
+      this.storeservice.setConnectedUsers(data.users);
     });
     this.socketservice.getsocket().on('sessionOut', (data) => { //getting socket data. if user try connecting in another socket, this socket will be destroyed
       this.logout();

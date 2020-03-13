@@ -101,8 +101,11 @@ export class DashboardComponent implements OnInit {
   }
 
   setConnectedUsers() {
-    this.storeservice.getConnectedUsers().subscribe(users => {
-      this.users = this.users.map(user => users.includes(user._id) ? { ...user, active: true } : { ...user, active: false });
+    this.storeservice.getConnectedUsers().subscribe(con_users => {
+      this.users = this.users.map((user) => {
+        let match = con_users.filter((con_user) => con_user.user_id == user._id ? true : false)[0];
+        return match ? { ...user, active: true, socket_id: match.socket_id } : { ...user, active: false, socket_id: '' };
+      });
     });
   }
 
