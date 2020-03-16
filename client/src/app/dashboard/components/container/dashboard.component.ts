@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
   onScroll() {
     if (this.messagesToShow.length <= this.totalCount) {
       this.page += 1;
-      this.messageService.getMessages(2, this.selectedGroup._id, this.page).subscribe(data => {
+      this.messageService.getMessages(this.page, 2, this.selectedGroup._id).subscribe(data => {
         Array.prototype.push.apply(this.messages, data['messages']);
         this.messagesToShow = this.messages;
         this.setScroll();
@@ -144,7 +144,7 @@ export class DashboardComponent implements OnInit {
 
     //entering new group
     this.socketService.getsocket().emit('subscribe', group._id);
-    this.messageService.getMessages(2, group._id, this.page).subscribe(data => {
+    this.messageService.getMessages(this.page, 2, this.selectedGroup._id).subscribe(data => {
       //infinite scroll
       Array.prototype.push.apply(this.messages, data['messages']);
       this.totalCount = data['total'];
