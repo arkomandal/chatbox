@@ -8,13 +8,23 @@ exports.create = async (req, res) => {
 };
 
 exports.findAll = async (req, res) => {
-    const { sender, receiver_type, receiver, page, filter } = req.params;
-    let records = 10,
-        limit = records * page,
-        skip = limit - records;
-    let order = filter == 1 ? 1 : filter == 2 ? -1 : 1;
-    if (receiver_type == 2) {
+    try {
+        const { page, filter } = req.params;
+        const { receiver_type, receiver, sender } = req.query;
+        let records = 10,
+            limit = records * page,
+            skip = limit - records;
+        let order = filter == 1 ? 1 : filter == 2 ? -1 : 1;
+        let condition = {
+            message: { $regex: new RegExp(req.params[0], "i") }, //where. i for ignore case
+            receiver_type: receiver_type,
+            receiver: ObjectId(receiver),
+            ...(sender != '' && { sender: ObjectId(sender) })
+        };
         let messages = await db.message.aggregate([
+            {
+                $match: condition
+            },
             {
                 $lookup:
                 {
@@ -24,24 +34,20 @@ exports.findAll = async (req, res) => {
                     as: "sender"
                 }
             },
-            {
-                $match: {
-                    message: { $regex: new RegExp(req.params[0], "i") }, //where. i for ignore case
-                    receiver_type: receiver_type,
-                    receiver: ObjectId(receiver)
-                }
-            },
             { $sort: { createdAt: order } },
             { $limit: limit },
             { $skip: skip }
         ]);
         const data = {
-            total: await db.message.countDocuments(),
+            total: await db.message.countDocuments(condition),
             messages: messages.map(msg => {
                 return { message: msg.message, sender: msg.sender[0].user_name, senderId: msg.sender[0]._id, time: msg.createdAt };
             })
         };
         res.send(data);
+    }
+    catch (err) {
+        console.log(err);
     }
 };
 

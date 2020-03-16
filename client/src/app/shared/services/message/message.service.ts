@@ -22,8 +22,8 @@ export class MessageService implements Gateway {
     });
   }
 
-  public getMessages(receiver_type, receiver, page) {
-    return this.http.get(`${this.GATEWAY}/message/list/${'123'}/${receiver_type}/${receiver}/${page}/1/`);
+  public getMessages(page, receiver_type, receiver, sender = '') {
+    return this.http.get(`${this.GATEWAY}/message/list/${page}/1/?receiver_type=${receiver_type}&receiver=${receiver}&sender=${sender}`);
   }
 
 }
