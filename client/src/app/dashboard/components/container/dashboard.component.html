@@ -2,21 +2,9 @@
     <div class='chatbox'>
         <div class='chatbox__user-list' *ngIf="user">
             <h1>
-                <button (click)="setList(1)">Groups</button> | <button (click)="setList(2)">Users</button>
+                <button (click)="setList(1)">Users</button> | <button (click)="setList(2)">Groups</button>
             </h1>
             <mat-nav-list class="user-scrollbar" *ngIf="listType == 1">
-                <mat-list-item *ngFor="let group of groups">
-                    <div class='chatbox__user--busy'>
-                        <button [disabled]="selectedGroup?._id == group.group._id"
-                            (click)="getGroupMessages(group.group)">
-                            {{group.group.group_name}}
-                        </button>
-                    </div>
-                </mat-list-item>
-                <button mat-stroked-button color="accent" style="width: 100%;" (click)="openDialog()">Create New Group
-                </button>
-            </mat-nav-list>
-            <mat-nav-list class="user-scrollbar" *ngIf="listType == 2">
                 <mat-list-item *ngFor="let user of users">
                     <div class='chatbox__user--active' *ngIf="user.active; else inactiveUser">
                         <button [disabled]="selectedUser?._id == user._id" (click)="getUserMessages(user)">
@@ -32,6 +20,49 @@
                     </ng-template>
                 </mat-list-item>
             </mat-nav-list>
+            <mat-nav-list class="user-scrollbar" *ngIf="listType == 2">
+                <mat-list-item *ngFor="let group of groups">
+                    <div class='chatbox__user--busy'>
+                        <button [disabled]="selectedGroup?._id == group.group._id"
+                            (click)="getGroupMessages(group.group)">
+                            {{group.group.group_name}}
+                        </button>
+                    </div>
+                </mat-list-item>
+                <button mat-stroked-button color="accent" style="width: 100%;" (click)="openDialog()">Create New Group
+                </button>
+            </mat-nav-list>
+        </div>
+
+        <div *ngIf="selectedUser && messages">
+            {{selectedUser?.user_name}}
+            {{userTypingMessage}}
+            <div #scrollMe [scrollTop]="scrollHeight" class="search-results" infiniteScroll [infiniteScrollDistance]="2"
+                [infiniteScrollThrottle]="50" (scrolled)="onScroll()" [infiniteScrollDisabled]="isFullListDisplayed"
+                [scrollWindow]="false">
+
+                <div class="chatbox__messages" *ngFor="let message of messages">
+                    <div class="chatbox__messages__user-message">
+                        <div *ngIf="message.senderId == this.user._id; else others"
+                            class="chatbox__messages__user-message--ind-message" style="float: right">
+                            <p class="name">You</p>
+                            <br />
+                            <p class="message">{{message.message}}</p>
+                        </div>
+                        <ng-template #others>
+                            <div class="chatbox__messages__user-message--ind-message" style="float: left">
+                                <p class="name">{{message.sender}}</p>
+                                <br />
+                                <p class="message">{{message.message}}</p>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+            <form [formGroup]="messageForm" (keydown)="onSendUser($event)" class="message_form">
+                <input type="text" class="form-control" formControlName="message" placeholder="Enter your message"
+                    required>
+            </form>
         </div>
 
         <div *ngIf="selectedGroup && messages">
@@ -66,5 +97,7 @@
                     required>
             </form>
         </div>
+
+        
     </div>
 </div>
