@@ -1,12 +1,3 @@
-# Tasks
-* Angular Material Design and Layout
-* Infinite scroll
-* Backend joi validation
-* Assigning users
-* Leaving Group
-* Personal Chat
-* Online/Offline Functionality
-
 # Backend Technologies
 * Express.Js
 * Mongodb
