@@ -15,12 +15,27 @@ exports.findAll = async (req, res) => {
             limit = records * page,
             skip = limit - records;
         let order = filter == 1 ? 1 : filter == 2 ? -1 : 1;
-        let condition = {
-            message: { $regex: new RegExp(req.params[0], "i") }, //where. i for ignore case
-            receiver_type: receiver_type,
-            receiver: ObjectId(receiver),
-            ...(sender != '' && { sender: ObjectId(sender) })
-        };
+        let condition;
+        if (sender == "" && receiver_type == 2) { //group chat
+            condition = {
+                message: { $regex: new RegExp(req.params[0], "i") }, //where. i for ignore case
+                receiver_type: receiver_type,
+                receiver: ObjectId(receiver)
+            };
+        } else { //one to one chat
+            condition = {
+                $and: [
+                    { message: { $regex: new RegExp(req.params[0], "i") } },
+                    { receiver_type: receiver_type },
+                    {
+                        $or: [
+                            { receiver: ObjectId(receiver), sender: ObjectId(sender) },
+                            { receiver: ObjectId(sender), sender: ObjectId(receiver) }
+                        ]
+                    }
+                ]
+            };
+        }
         let messages = await db.message.aggregate([
             {
                 $match: condition

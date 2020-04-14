@@ -56,6 +56,8 @@ export class DashboardComponent implements OnInit {
       this.getAllGroups();
       this.getAllUsers();
     });
+
+    //group settings
     this.socketService.getsocket().on('typing', (data) => {
       this.userTypingMessage = `${data.senderName} is typing...`;
       setTimeout(() => {
@@ -66,17 +68,45 @@ export class DashboardComponent implements OnInit {
       this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
       this.setScroll();
     });
+
+    //user settings
+    this.socketService.getsocket().on('typingPersonal', () => {
+      this.userTypingMessage = ` is typing...`;
+      setTimeout(() => {
+        this.userTypingMessage = "";
+      }, 1000);
+    });
+    this.socketService.getsocket().on('messagePersonal', (data) => {
+      if (data.senderId == this.selectedUser._id) {
+        this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
+        this.setScroll();
+      }
+    });
+    this.socketService.getsocket().on('messagePersonalToSameUser', (data) => {
+      this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
+      this.setScroll();
+    });
+
     this.setConnectedUsers();
   }
 
   onScroll() {
+    console.log('listtype: ', this.listType)
     if (this.messagesToShow.length <= this.totalCount) {
       this.page += 1;
-      this.messageService.getMessages(this.page, 2, this.selectedGroup._id).subscribe(data => {
-        Array.prototype.push.apply(this.messages, data['messages']);
-        this.messagesToShow = this.messages;
-        this.setScroll();
-      });
+      if (this.listType == 1) {
+        this.messageService.getMessages(this.page, 1, this.selectedUser._id, this.user._id).subscribe(data => {
+          Array.prototype.push.apply(this.messages, data['messages']);
+          this.messagesToShow = this.messages;
+          this.setScroll();
+        });
+      } else if (this.listType == 2) {
+        this.messageService.getMessages(this.page, 2, this.selectedGroup._id).subscribe(data => {
+          Array.prototype.push.apply(this.messages, data['messages']);
+          this.messagesToShow = this.messages;
+          this.setScroll();
+        });
+      }
     } else {
       this.isFullListDisplayed = true;
     }
@@ -100,6 +130,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  //adding socket_id with users
   setConnectedUsers() {
     this.storeservice.getConnectedUsers().subscribe(con_users => {
       this.users = this.users.map((user) => {
@@ -128,11 +159,22 @@ export class DashboardComponent implements OnInit {
   }
 
   getUserMessages(user) {
+    this.selectedGroup = null;
     this.selectedUser = user;
     this.resetMessages();
+
+    //getting messages
+    this.messageService.getMessages(this.page, 1, this.selectedUser._id, this.user._id).subscribe(data => {
+      //infinite scroll
+      Array.prototype.push.apply(this.messages, data['messages']);
+      this.totalCount = data['total'];
+      this.messagesToShow = this.messages;
+      this.setScroll();
+    });
   }
 
   getGroupMessages(group) {
+    this.selectedUser = null;
     this.selectedGroup = group;
     this.resetMessages();
 
@@ -174,6 +216,17 @@ export class DashboardComponent implements OnInit {
       });
     } else {
       this.socketService.getsocket().emit('typing', this.selectedGroup._id, this.user.user_name);
+    }
+  }
+
+  onSendUser(event) {
+    if (event.keyCode == 13) {
+      this.messageService.setMessage(this.user.token, this.user._id, 1, this.selectedUser._id, this.messageForm.value.message).subscribe(data => {
+        this.socketService.getsocket().emit('messagePersonal', this.selectedUser.socket_id, this.user._id, this.user.user_name, this.messageForm.value.message, data['createdAt']);
+        this.messageForm.reset();
+      });
+    } else {
+      this.socketService.getsocket().emit('typingPersonal', this.selectedUser.socket_id, this.user.user_name);
     }
   }
 
