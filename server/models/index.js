@@ -6,7 +6,7 @@ var basename = path.basename(module.filename);
 var db = {};
 mongoose.set('useFindAndModify', false);
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/demo",
+mongoose.connect("mongodb://localhost:27017/friends_db",
     { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => {
         console.log("connected to database");
