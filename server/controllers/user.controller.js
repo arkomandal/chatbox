@@ -10,9 +10,9 @@ exports.create = async (req, res) => {
             user_name, phone, password: bcrypt.hashSync(password, 10)
         });
         await user.save();
-        res.send(user);
+        res.send({ status: 200, message: 'success', data: user }).status(200);
     } else {
-        res.send({ message: "duplicate" }).status(409);
+        res.send({ status: 409, message: "User exists with this phone number", data: null }).status(409);
     }
 };
 

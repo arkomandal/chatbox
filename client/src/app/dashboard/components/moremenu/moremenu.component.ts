@@ -36,7 +36,15 @@ export class MoremenuComponent implements OnInit {
       if (result) {
         let ids = result.filter(el => el.checked && !el.disabled).map(el => el._id);
         this.userService.addUserToGroup(this.group._id, ids).subscribe(data => {
-          if (data) this.toast.success("Successfully added");
+          if (data) {
+            this.toast.success("Successfully added");
+            //notifying sockets that it is assigned to refresh group list to get the newly assigned one
+            this.storeservice.getConnectedUsers().subscribe((data) => {
+              data.filter(user => ids.includes(user.user_id)).forEach(user => {
+                this.socketService.getsocket().emit('assignmentNotification', user.socket_id);
+              });
+            });
+          }
           else this.toast.warning("Please try again");
         }, () => {
           this.toast.warning("Please try again");
@@ -59,5 +67,9 @@ export class MoremenuComponent implements OnInit {
         });
       });
     }
+  }
+
+  renameGroup() {
+    console.log("this functionality is not implemented yet");
   }
 }

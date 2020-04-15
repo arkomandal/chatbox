@@ -62,6 +62,11 @@ export class DashboardComponent implements OnInit {
       this.getAllUsers();
     });
 
+    //this socket is added into a group
+    this.socketService.getsocket().on('assignmentNotification', () => {
+      this.getAllGroups();
+    });
+
     //group settings
     this.socketService.getsocket().on('typing', (data) => {
       this.userTypingMessage = `${data.senderName} is typing...`;
@@ -82,7 +87,6 @@ export class DashboardComponent implements OnInit {
       }, 1000);
     });
     this.socketService.getsocket().on('messagePersonal', (data) => {
-      console.log('hit: ', data.senderId == this.selectedUser._id)
       if (data.senderId == this.selectedUser._id) {
         this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
         this.setScroll();
@@ -97,7 +101,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onScroll() {
-    console.log('listtype: ', this.listType)
     if (this.messagesToShow.length <= this.totalCount) {
       this.page += 1;
       if (this.listType == 1) {
@@ -123,17 +126,21 @@ export class DashboardComponent implements OnInit {
   }
 
   getAllGroups() {
-    this.userservice.getUserGroups(this.user._id, this.user.token).subscribe(data => {
-      this.groups = data[0]['group_users'];
-    });
+    if (this.user) {
+      this.userservice.getUserGroups(this.user._id, this.user.token).subscribe(data => {
+        this.groups = data[0]['group_users'];
+      });
+    }
   }
 
   getAllUsers() {
-    this.userservice.getOtherUsers(this.user._id).subscribe(data => {
-      this.users = data;
-    }, () => { }, () => {
-      this.setConnectedUsers();
-    });
+    if (this.user) {
+      this.userservice.getOtherUsers(this.user._id).subscribe(data => {
+        this.users = data;
+      }, () => { }, () => {
+        this.setConnectedUsers();
+      });
+    }
   }
 
   //adding socket_id with users

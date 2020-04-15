@@ -16,6 +16,9 @@ module.exports = (io) => {
         socket.on('newUserSignup', function () {
             socket.broadcast.emit('newUserSignup');
         });
+        socket.on('assignmentNotification', function (socket_id) {
+            io.to(socket_id).emit('assignmentNotification');
+        });
 
         //group chat management
         socket.on('subscribe', function (group) {
