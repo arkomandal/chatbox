@@ -156,7 +156,7 @@ export class DashboardComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(CreategroupComponent, {
       width: '250px',
-      data: { name: this.user.user_name, animal: this.group_name }
+      data: { name: this.user.user_name }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -247,5 +247,11 @@ export class DashboardComponent implements OnInit {
     this.selectedGroup = null;
     this.getAllGroups();
     this.resetMessages();
+
+    //after reseting the groups
+    if (data.type == "renamed") {
+      this.selectedGroup = data.data;
+      this.getGroupMessages(data.data);
+    }
   }
 }
