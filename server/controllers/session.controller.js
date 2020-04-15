@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 exports.create = async (req, res, next) => {
     authService.authenticate(req.body).then(async user => {
-        if (!user) res.status(400).json({ message: 'Username or password is incorrect' })
+        if (!user) res.status(400).json({ message: 'Phone number or password is incorrect' })
         else {
             const session = new db.session({ user_id: user._id, socket_id: req.body.socket_id });
             await session.save();
