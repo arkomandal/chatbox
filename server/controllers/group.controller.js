@@ -36,8 +36,8 @@ exports.findAll = async (req, res) => {
         { $limit: limit },
         { $skip: skip }
     ]);
-    for(let group of groups){
-        for(user of group.group_users){
+    for (let group of groups) {
+        for (user of group.group_users) {
             user.user = await db.user.findById(user.user_id);
         }
     }
@@ -56,5 +56,12 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     let group = await db.group.findByIdAndRemove(req.params.groupId);
+    await db.group_user.deleteMany({
+        group_id: req.params.groupId
+    });
+    await db.message.deleteMany({
+        receiver_type: 2,
+        receiver: req.params.groupId
+    });
     res.send(group)
 };

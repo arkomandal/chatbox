@@ -3,7 +3,8 @@ import { UserService } from 'src/app/shared/services/user/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { StoreService } from 'src/app/shared/services/store/store.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AddcontactsComponent } from '../../dialogs/addcontacts/addcontacts.component'
+import { AddcontactsComponent } from '../../dialogs/addcontacts/addcontacts.component';
+import { RenamegroupComponent } from 'src/app/dashboard/dialogs/renamegroup/renamegroup.component'
 import { SocketService } from 'src/app/shared/services/socket/socket.service';
 
 @Component({
@@ -56,20 +57,48 @@ export class MoremenuComponent implements OnInit {
   leaveGroup() {
     if (confirm("Are you sure?")) {
       this.storeservice.getAuthUser().subscribe(user => {
-        this.userService.removeUserFromGroup(this.group._id, user._id).subscribe(data => {
-          if (data) {
-            this.socketService.getsocket().emit('unsubscribe', this.group._id);
-            this.output.emit(data);
-            this.toast.success("You've left");
-          }
-        }, () => {
-          this.toast.warning("Please try again");
-        });
+        if (this.group) {
+          this.userService.registeredUsers(this.group._id).subscribe((data: any) => {
+            let userStrength = data.filter(el => el.checked && el.disabled).length;
+            if (userStrength == 1) { //LAST USER. destroy group and all the messages
+              this.userService.destroyGroupAndMessages(this.group._id).subscribe(data => {
+                if (data) { //data = { _id, user_id, group_id }
+                  this.socketService.getsocket().emit('unsubscribe', this.group._id);
+                  this.output.emit({ type: 'left', data: data });
+                  this.toast.success("You've left");
+                }
+              }, () => {
+                this.toast.warning("Please try again");
+              });
+            } else { //just pull the user out from the group
+              this.userService.removeUserFromGroup(this.group._id, user._id).subscribe(data => {
+                if (data) { //data = { _id, user_id, group_id }
+                  this.socketService.getsocket().emit('unsubscribe', this.group._id);
+                  this.output.emit({ type: 'left', data: data });
+                  this.toast.success("You've left");
+                }
+              }, () => {
+                this.toast.warning("Please try again");
+              });
+            }
+          })
+        }
       });
     }
   }
 
   renameGroup() {
-    console.log("this functionality is not implemented yet");
+    const dialogRef = this.dialog.open(RenamegroupComponent, {
+      width: '250px',
+      data: { group_name: this.group.group_name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.trim() != "") {
+        this.userService.updateGroup(this.group._id, result).subscribe((data) => {
+          if (data) this.output.emit({ type: 'renamed', data: data });
+        })
+      }
+    });
   }
 }
