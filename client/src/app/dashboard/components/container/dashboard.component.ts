@@ -57,6 +57,11 @@ export class DashboardComponent implements OnInit {
       this.getAllUsers();
     });
 
+    //new user signup notification
+    this.socketService.getsocket().on('newUserSignup', () => {
+      this.getAllUsers();
+    });
+
     //group settings
     this.socketService.getsocket().on('typing', (data) => {
       this.userTypingMessage = `${data.senderName} is typing...`;
@@ -77,6 +82,7 @@ export class DashboardComponent implements OnInit {
       }, 1000);
     });
     this.socketService.getsocket().on('messagePersonal', (data) => {
+      console.log('hit: ', data.senderId == this.selectedUser._id)
       if (data.senderId == this.selectedUser._id) {
         this.messages.push({ message: data.message, sender: data.senderName, time: data.time, senderId: data.senderId })
         this.setScroll();
