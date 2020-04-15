@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user/user.service';
+import {SocketService} from 'src/app/shared/services/socket/socket.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -20,6 +21,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private toast: ToastrService,
     private userservice: UserService,
+    private socketService: SocketService,
     private fb: FormBuilder,
     private router: Router) { }
 
@@ -29,6 +31,7 @@ export class SignupComponent implements OnInit {
   onSubmit() {
     this.userservice.signup(this.signupForm.value).subscribe(data => {
       this.toast.success('Success!');
+      this.socketService.getsocket().emit('newUserSignup');
       this.router.navigate(['/auth'])
     }, (err) => {
       this.toast.warning(JSON.stringify(err))

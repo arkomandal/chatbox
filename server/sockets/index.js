@@ -13,6 +13,10 @@ module.exports = (io) => {
             io.emit('connectedUsers', { users: users });
         });
 
+        socket.on('newUserSignup', function () {
+            socket.broadcast.emit('newUserSignup');
+        });
+
         //group chat management
         socket.on('subscribe', function (group) {
             socket.join(group);
