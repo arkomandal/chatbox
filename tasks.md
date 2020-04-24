@@ -1,10 +1,9 @@
-* delete messages and the group itself after the last user leaves the group
-* implement env and add joi validation
-* delivered and seen feature
+* message type 2: user left/ group renamed/user joined group
 * send emojis
-* user left
-* confirm before adding in group
+* delivered and seen feature
 * forget password & change password
 * add/update profile with name and profile picture
-* change theme
 * delete my account and all my messages
+
+* implement env and add joi validation
+* confirm before adding in group

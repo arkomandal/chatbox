@@ -67,6 +67,14 @@ export class DashboardComponent implements OnInit {
       this.getAllGroups();
     });
 
+    this.socketService.getsocket().on('groupRenamed', (group) => {
+      this.getAllGroups();
+      let group_id = this.selectedGroup ? this.selectedGroup._id : null;
+      if (group_id && group_id == group._id) {
+        this.selectedGroup = group;
+      }
+    });
+
     //group settings
     this.socketService.getsocket().on('typing', (data) => {
       this.userTypingMessage = `${data.senderName} is typing...`;
@@ -248,10 +256,10 @@ export class DashboardComponent implements OnInit {
     this.getAllGroups();
     this.resetMessages();
 
-    //after reseting the groups
-    if (data.type == "renamed") {
-      this.selectedGroup = data.data;
-      this.getGroupMessages(data.data);
-    }
+    // //after reseting the groups
+    // if (data.type == "renamed") {
+    //   this.selectedGroup = data.data;
+    //   this.getGroupMessages(data.data);
+    // }
   }
 }
