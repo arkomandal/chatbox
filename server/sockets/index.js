@@ -33,6 +33,9 @@ module.exports = (io) => {
         socket.on('typing', function (group, senderName) {
             socket.in(group).emit('typing', { senderName }); //send to room excluding you (socket)
         });
+        socket.on('groupRenamed', function (socket_id, group) {
+            io.to(socket_id).emit('groupRenamed', group);
+        });
 
         //personal chat management
         socket.on('messagePersonal', function (socket_id, senderId, senderName, message, createdAt) {

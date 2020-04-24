@@ -96,7 +96,17 @@ export class MoremenuComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.trim() != "") {
         this.userService.updateGroup(this.group._id, result).subscribe((data) => {
-          if (data) this.output.emit({ type: 'renamed', data: data });
+          if (data){
+            // this.output.emit({ type: 'renamed', data: data });
+            this.userService.registeredUsers(this.group._id).subscribe((groupusers: any) => {
+              let ids = groupusers.map(el => el._id);
+              this.storeservice.getConnectedUsers().subscribe((conusers) => {
+                conusers.filter(conuser => ids.includes(conuser.user_id)).forEach(user => {
+                  this.socketService.getsocket().emit('groupRenamed', user.socket_id, data);
+                });
+              });
+            });
+          } 
         })
       }
     });
